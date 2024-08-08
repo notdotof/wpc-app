@@ -84,7 +84,6 @@ if choice == "账号管理":
     accounts_data = get_accounts()
     accounts_df = pd.DataFrame(accounts_data)
     st.dataframe(accounts_df)
-
 else:
     # 单个账号页面
     st.header(f"账号: {choice}")
@@ -96,7 +95,7 @@ else:
             result = start_spider(choice)
             if result.get('success'):
                 st.success(f"{choice} 已启动")
-else:
+            else:
                 st.error(f"启动失败: {result.get('message', '未知错误')}")
     with col2:
         if st.button("停止"):
@@ -113,7 +112,7 @@ else:
                 st.experimental_rerun()
             else:
                 st.error(f"删除失败: {result.get('message', '未知错误')}")
-
+                
     # 显示日志
     st.subheader("日志")
     logs = get_logs(choice)
