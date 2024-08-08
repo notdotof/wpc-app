@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 
-API_BASE_URL = "https://https://wpc.notdot.link/"
+API_BASE_URL = "https://wpc.notdot.link"
 
 # 获取账号信息
 def get_accounts():
