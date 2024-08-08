@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 from time import sleep
 
-API_BASE_URL = "http://wpc.notdot.link"
+API_BASE_URL = "https://wpc.notdot.link"
 
 # 获取账号信息
 def get_accounts():
