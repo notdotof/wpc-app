@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 
-API_BASE_URL = "https://wpc.notdot.link"
+API_BASE_URL = "https://https://wpc.notdot.link/"
 
 # 获取账号信息
 def get_accounts():
@@ -55,12 +55,12 @@ if choice == "账号管理":
     with st.form("account_form"):
         st.subheader("添加账号")
         account = st.text_input("账号")
-        account_type = st.text_input("类型")
+        account_type = st.selectbox("类型", ["普法", "干部", "华医", "公需课"])
         password = st.text_input("密码", type="password")
         submitted = st.form_submit_button("添加")
         if submitted:
             result = add_account(account, account_type, password)
-            if result.get('success'):
+            if result.get('status') == 'success':
                 st.success(f"账号 {account} 添加成功")
             else:
                 st.error(f"添加失败: {result.get('message', '未知错误')}")
@@ -74,7 +74,7 @@ if choice == "账号管理":
         success_count = 0
         for _, row in data.iterrows():
             result = add_account(row['账号'], row['类型'], row['密码'])
-            if result.get('success'):
+            if result.get('status') == 'success':
                 success_count += 1
         st.success(f"成功导入 {success_count} 个账号")
         st.rerun()
@@ -84,29 +84,31 @@ if choice == "账号管理":
     accounts_data = get_accounts()
     accounts_df = pd.DataFrame(accounts_data)
     st.dataframe(accounts_df)
+
 else:
     # 单个账号页面
     st.header(f"账号: {choice}")
+
     # 操作按钮
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("启动"):
             result = start_spider(choice)
-            if result.get('success'):
+            if result.get('status') == 'success':
                 st.success(f"{choice} 已启动")
             else:
                 st.error(f"启动失败: {result.get('message', '未知错误')}")
     with col2:
         if st.button("停止"):
             result = stop_spider(choice)
-            if result.get('success'):
+            if result.get('status') == 'success':
                 st.success(f"{choice} 已停止")
             else:
                 st.error(f"停止失败: {result.get('message', '未知错误')}")
     with col3:
         if st.button("删除"):
             result = delete_account(choice)
-            if result.get('success'):
+            if result.get('status') == 'success':
                 st.success(f"{choice} 已删除")
                 st.rerun()
             else:
@@ -115,8 +117,8 @@ else:
     # 显示日志
     st.subheader("日志")
     logs = get_logs(choice)
-    if logs.get('success'):
-        log_text = "\n".join(logs.get('logs', [])[-50:])  # 显示最后50条日志
+    if logs.get('status') == 'success':
+        log_text = logs.get('logs', '')
         st.text_area("最近的日志", log_text, height=400)
     else:
         st.error(f"获取日志失败: {logs.get('message', '未知错误')}")
