@@ -64,7 +64,7 @@ if choice == "账号管理":
                 st.success(f"账号 {account} 添加成功")
             else:
                 st.error(f"添加失败: {result.get('message', '未知错误')}")
-            st.experimental_rerun()
+            st.rerun()
 
     # 导入Excel文件并添加账号
     st.subheader("导入Excel文件")
@@ -77,7 +77,7 @@ if choice == "账号管理":
             if result.get('success'):
                 success_count += 1
         st.success(f"成功导入 {success_count} 个账号")
-        st.experimental_rerun()
+        st.rerun()
 
     # 显示账号表格
     st.subheader("账号总览")
@@ -87,7 +87,6 @@ if choice == "账号管理":
 else:
     # 单个账号页面
     st.header(f"账号: {choice}")
-
     # 操作按钮
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -109,10 +108,10 @@ else:
             result = delete_account(choice)
             if result.get('success'):
                 st.success(f"{choice} 已删除")
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error(f"删除失败: {result.get('message', '未知错误')}")
-                
+
     # 显示日志
     st.subheader("日志")
     logs = get_logs(choice)
